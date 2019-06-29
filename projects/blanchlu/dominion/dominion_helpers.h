@@ -11,5 +11,10 @@ int gainCard(int supplyPos, struct gameState *state, int toFlag, int player);
 int getCost(int cardNumber);
 int cardEffect(int card, int choice1, int choice2, int choice3, 
 	       struct gameState *state, int handPos, int *bonus);
-
+int Baron(int currentPlayer, int choice1, struct gameState *state);
+int Minion(int currentPlayer, int choice1, int choice2, struct gameState *state, int handPos);
+int Ambassador(int currentPlayer, int choice1, int choice2, struct gameState *state, int handPos);
+int Tribute(int currentPlayer, int nextPlayer, struct gameState *state); 
+int Mine(int currentPlayer, int choice1, int choice2, struct gameState *state, int handPos);
+int trashCard(int currentPlayer, struct gameState* state, int card, int trashFlag);
 #endif
