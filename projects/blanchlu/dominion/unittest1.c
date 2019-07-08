@@ -45,14 +45,48 @@ int main() {
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
 	myAssert(testG.numBuys == G.numBuys + 1);
 
-//	// ----------- TEST 1: choice1 = 1 = +2 cards --------------
-//	printf("TEST 1: choice1 = 1 = +2 cards\n");
-//
-//	// copy the game state to a test case
-//	memcpy(&testG, &G, sizeof(struct gameState));
-//	choice1 = 1;
-//	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
-//
+	// ----------- TEST 2: choice1 = 1 = discard estate --------------
+	printf("\nTEST 2: choice1 = 1 = discard estate\n");
+
+	choice1 = 1;
+    G.hand[thisPlayer][0] = estate;
+	// copy the game state to a test case
+	memcpy(&testG, &G, sizeof(struct gameState));
+	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
+    printf("Discarding estate = coins +4\n");
+    myAssert(testG.coins == G.coins + 4);
+    printf("Discarding estate = estate in discard pile\n");
+    myAssert(testG.discard[thisPlayer][testG.discardCount[thisPlayer] - 1] == estate);
+    
+    // remove any estates from hand
+    for(i = 0; i < G.handCount[thisPlayer]; i++) {
+        if(G.hand[thisPlayer][i] == estate) {
+            G.hand[thisPlayer][i] = duchy;     
+        }
+    }
+	// copy the game state to a test case
+	memcpy(&testG, &G, sizeof(struct gameState));
+	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
+    printf("User has no estate = estate card decrements from supply by one\n");
+    myAssert(G.supplyCount[estate] == testG.supplyCount[estate] + 1);
+
+	// ----------- TEST 3: choice1 = 0 = gain estate --------------
+	printf("\nTEST 3: choice1 = 0 = gain estate\n");
+
+    // remove any estates from hand
+    for(i = 0; i < G.handCount[thisPlayer]; i++) {
+        if(G.hand[thisPlayer][i] == estate) {
+            G.hand[thisPlayer][i] = duchy;     
+        }
+    }
+    
+    choice1 = 0;
+	// copy the game state to a test case
+	memcpy(&testG, &G, sizeof(struct gameState));
+	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
+    printf("User chooses to gain estate card = state card decrements from supply by one\n");
+    myAssert(G.supplyCount[estate] == testG.supplyCount[estate] + 1);
+
 //	newCards = 2;
 //	xtraCoins = 0;
 //	printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + newCards - discarded);

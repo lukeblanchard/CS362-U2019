@@ -889,7 +889,7 @@ int Tribute(int currentPlayer, int nextPlayer, struct gameState *state) {
 int Mine(int currentPlayer, int choice1, int choice2, struct gameState *state, int handPos){
 		int j;
 		//BUG!
-		//j = state->hand[currentPlayer][choice1];  //store card we will trash
+		j = state->hand[currentPlayer][choice1];  //store card we will trash
 	
 		if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
 		{
