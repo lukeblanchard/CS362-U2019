@@ -80,8 +80,6 @@ int main() {
     }
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
     myAssert(G.supplyCount[estate] + 1 == testG.supplyCount[estate]);
-    printf("G supply: %d\n", G.supplyCount[estate]);
-    printf("Test suppply: %d\n", testG.supplyCount[estate]);
 
 	// ----------- TEST 5 --------------
 	printf("\nTEST 5:\n");
