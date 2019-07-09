@@ -17,14 +17,8 @@ void myAssert(int bool) {
 }
 
 int main() {
-    int newCards = 0;
-    int discarded = 1;
-    int xtraCoins = 0;
-    int shuffledCards = 0;
-
-    int i, j, m, match;
+    int i, j, match;
     int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
-    int remove1, remove2;
     int seed = 1000;
     int numPlayers = 2;
     int thisPlayer = 0;
@@ -37,16 +31,20 @@ int main() {
 
 	printf("----------------- Testing Card: %s ----------------\n", TESTCARD);
 
-	// ----------- TEST 1: +1 buys --------------
-	printf("TEST 1: +1 Action\n");
+	// ----------- TEST 1 --------------
+	printf("TEST 1:\n");
+    printf("Expected: +1 actions\n");
 
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
 	cardEffect(minion, choice1, choice2, choice3, &testG, handpos, &bonus);
 	myAssert(testG.numActions == G.numActions + 1);
 
-	// ----------- TEST 2: choice1 = 1 = +2 coins --------------
-	printf("\nTEST 2: choice1 = 1 = +2 coins\n");
+	// ----------- TEST 2 --------------
+	printf("\nTEST 2:\n");
+    printf("Conditions:\n"); 
+    printf("* choice1 = 1\n");
+    printf("Expected: coins increase by +2\n");
 
 	choice1 = 1;
 	// copy the game state to a test case
@@ -54,10 +52,12 @@ int main() {
 	cardEffect(minion, choice1, choice2, choice3, &testG, handpos, &bonus);
 	myAssert(testG.coins == G.coins + 2);
 
-	// ----------- TEST 3: choice2 = 1 = redraw cards --------------
-	printf("\nTEST 3: choice2 = 1 = draw new cards\n");
-
-    printf("*Draw new cards = old cards in playedCards, not trashed ");
+	// ----------- TEST 3 --------------
+	printf("\nTEST 3:\n");
+    printf("Conditions:\n"); 
+    printf("* choice2 = 1\n");
+    printf("Expected: player discards hand, those cards go to playedCards pile\n");
+    
 	choice1 = 0;
 	choice2 = 1;
 
@@ -85,11 +85,32 @@ int main() {
 	}
 	myAssert(match == 1);
     
-    printf("*New hand count is 4 ");
+	// ----------- TEST 4 --------------
+	printf("\nTEST 4:\n");
+    printf("Conditions:\n"); 
+    printf("* choice2 = 1\n");
+    printf("Expected: player discards hand, new hand count is 4\n");
     myAssert(testG.handCount[thisPlayer] == 4);
 
+	// ----------- TEST 5 --------------
+	printf("\nTEST 5:\n");
+    printf("Conditions:\n"); 
+    printf("* choice2 = 1\n");
+    printf("Expected: other player discards hand, new hand count is 4\n");
+
+	// copy the game state to a test case
+	memcpy(&testG, &G, sizeof(struct gameState));
+    // initialize other player's hand
+    for(i = 0; i < 5; i++){
+        testG.hand[thisPlayer + 1][i] = i;
+    }
+
+    testG.handCount[thisPlayer + 1] = 5;
+    
+	cardEffect(minion, choice1, choice2, choice3, &testG, handpos, &bonus);
+    myAssert(testG.handCount[thisPlayer + 1] == 4);
+
 	printf("\n >>>>> SUCCESS: Testing complete %s <<<<<\n\n", TESTCARD);
-
-
+    
 	return 0;
 }

@@ -790,7 +790,7 @@ int Ambassador(int currentPlayer, int choice1, int choice2, struct gameState *st
 		}
 		if (j < choice2)
 		{
-				return -1;				
+				return -2;				
 		}
 
 		if (DEBUG) 
@@ -810,10 +810,10 @@ int Ambassador(int currentPlayer, int choice1, int choice2, struct gameState *st
 				}
 		}
 
-		//discard played card from hand
+		//discard played ambassador card from hand
 		discardCard(handPos, currentPlayer, state, 0);			
 
-		//trash copies of cards returned to supply
+		//trash copies of cards
 		for (j = 0; j < choice2; j++)
 		{
 
