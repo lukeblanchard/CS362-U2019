@@ -17,8 +17,8 @@ void myAssert(int bool) {
 }
 
 int main() {
-    int error;
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+    int error; 
+    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0, testEstateCount = 0, estateCount = 0;
     int seed = 1000;
     int numPlayers = 2;
     int thisPlayer = 0;
@@ -51,7 +51,7 @@ int main() {
     printf("* player has 2 estates in hand\n");
     printf("Expected: discard count for other player increases by 2\n");
 
-    choice1 = estate;
+    choice1 = 1;
     choice2 = 2;
 	memcpy(&testG, &G, sizeof(struct gameState));
 
@@ -62,8 +62,27 @@ int main() {
 	cardEffect(ambassador, choice1, choice2, choice3, &testG, handpos, &bonus);
     myAssert(testG.discardCount[thisPlayer + 1] == G.discardCount[thisPlayer + 1] + 2);
 
-	printf("\n >>>>> SUCCESS: Testing complete %s <<<<<\n\n", TESTCARD);
+	// ----------- TEST 2 --------------
+	printf("\nTEST 3:\n");
+    printf("* choice1 = 1 (estate)\n");
+    printf("* choice2 = 2\n");
+    printf("* player has 2 estates in hand\n");
+    printf("Expected: estate count for current player decreases by 2\n");
+    
+    for(i = 0; i < testG.handCount[thisPlayer]; i++) {
+        if(testG.hand[thisPlayer][i] == estate) {
+            testEstateCount++;     
+        }
+    }
 
+    for(i = 0; i < G.handCount[thisPlayer]; i++) {
+        if(G.hand[thisPlayer][i] == estate) {
+            estateCount++;     
+        }
+    }
+    myAssert(testEstateCount == estateCount - 2);
+
+	printf("\n >>>>> SUCCESS: Testing complete %s <<<<<\n\n", TESTCARD);
 
 	return 0;
 }
