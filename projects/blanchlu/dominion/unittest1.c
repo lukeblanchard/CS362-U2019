@@ -48,7 +48,7 @@ int main() {
     printf("Expected: coins increase by +4\n");
 
 	choice1 = 1;
-    G.hand[thisPlayer][0] = estate;
+    G.hand[thisPlayer][1] = estate;
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
@@ -61,16 +61,6 @@ int main() {
     printf("* player has estate\n"); 
     printf("Expected: estate in discard pile\n");
     myAssert(testG.discard[thisPlayer][testG.discardCount[thisPlayer] - 1] == estate);
-    
-    // remove any estates from hand
-    for(i = 0; i < G.handCount[thisPlayer]; i++) {
-        if(G.hand[thisPlayer][i] == estate) {
-            G.hand[thisPlayer][i] = duchy;     
-        }
-    }
-	// copy the game state to a test case
-	memcpy(&testG, &G, sizeof(struct gameState));
-	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
 
 	// ----------- TEST 4 --------------
 	printf("\nTEST 4:\n");
@@ -78,32 +68,39 @@ int main() {
     printf("* choice1 = 1\n");
     printf("* player has no estate\n"); 
     printf("Expected: estate card decrements from supply by one\n");
-    myAssert(G.supplyCount[estate] == testG.supplyCount[estate] + 1);
+
+	// copy the game state to a test case
+	memcpy(&testG, &G, sizeof(struct gameState));
+    
+    // remove any estates from hand
+    for(i = 0; i < testG.handCount[thisPlayer]; i++) {
+        if(testG.hand[thisPlayer][i] == estate) {
+            testG.hand[thisPlayer][i] = duchy;     
+        }
+    }
+	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
+    myAssert(G.supplyCount[estate] + 1 == testG.supplyCount[estate]);
+    printf("G supply: %d\n", G.supplyCount[estate]);
+    printf("Test suppply: %d\n", testG.supplyCount[estate]);
 
 	// ----------- TEST 5 --------------
 	printf("\nTEST 5:\n");
     printf("Conditions:\n"); 
     printf("* choice1 = 0\n");
-    printf("Expected: player gains estate\n");
-
-    // remove any estates from hand
-    for(i = 0; i < G.handCount[thisPlayer]; i++) {
-        if(G.hand[thisPlayer][i] == estate) {
-            G.hand[thisPlayer][i] = duchy;     
-        }
-    }
-    
+    printf("Expected: player gains estate in discard pile\n");
     choice1 = 0;
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
+
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
+    myAssert(testG.discard[thisPlayer][testG.discardCount[thisPlayer] - 1] == estate);
 
 	// ----------- TEST 6 --------------
 	printf("\nTEST 6:\n");
     printf("Conditions:\n"); 
     printf("* choice1 = 0\n");
-    printf("Expected: state card decrements from supply by one ");
-    myAssert(G.supplyCount[estate] == testG.supplyCount[estate] + 1);
+    printf("Expected: estate card decrements from supply by one ");
+    myAssert(G.supplyCount[estate] + 1 == testG.supplyCount[estate]);
 
 
 	printf("\n >>>>> SUCCESS: Testing complete %s <<<<<\n\n", TESTCARD);
