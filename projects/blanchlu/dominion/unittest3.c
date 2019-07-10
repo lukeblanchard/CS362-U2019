@@ -17,7 +17,7 @@ void myAssert(int bool) {
 }
 
 int main() {
-    int error; 
+    int i, error; 
     int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0, testEstateCount = 0, estateCount = 0;
     int seed = 1000;
     int numPlayers = 2;

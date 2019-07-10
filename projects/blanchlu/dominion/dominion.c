@@ -821,7 +821,6 @@ int Ambassador(int currentPlayer, int choice1, int choice2, struct gameState *st
 		}			
 		return 0;
 }			
-
 int Tribute(int currentPlayer, int nextPlayer, struct gameState *state) {
 		int i;
 		int tributeRevealedCards[2] = {-1, -1};
