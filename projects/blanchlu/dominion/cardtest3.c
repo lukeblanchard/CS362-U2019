@@ -35,7 +35,7 @@ int main() {
     printf("numActions == 1\n");    
 	myAssert(G.numActions == 1);
     printf("Current Player handCount == 5\n");
-	myAssert(G.handCount[G.whoseTurn] == 5);
+	myAssert(G.handCount[1] == 5);
     printf("All tests passed!\n");
     return 0;
 }

@@ -790,7 +790,7 @@ int Ambassador(int currentPlayer, int choice1, int choice2, struct gameState *st
 		}
 		if (j < choice2)
 		{
-				return -2;				
+				return -1;				
 		}
 
 		if (DEBUG) 
