@@ -64,24 +64,18 @@ int checkMinion(int currentPlayer, int choice1, int choice2, struct gameState *p
       }
     }
   }
-    if (r != 0)
-    {
-      printf("TEST ERRORED OUT\n");
-    }
-  
-  if (memcmp(&pre, post, sizeof(struct gameState)) != 0)
+
+  if (r != 0 || memcmp(&pre, post, sizeof(struct gameState)) != 0)
   {
-    printf("TEST FAILED\n");
-    printf("choice1: %d\n", choice1);
-    printf("pre handCount: %d\n", pre.handCount[currentPlayer]);
-    printf("post handCount: %d\n", post->handCount[currentPlayer]);
+    return 1;
   }
+
   return 0;
 }
 
 int main()
 {
-  int i, j, n, p, choice1, choice2, handPos, numPlayers;
+  int i, j, n, p, choice1, choice2, handPos, numPlayers, failFlag;
   int denominations = 25;
   struct gameState G;
 
@@ -105,7 +99,7 @@ int main()
     G.playedCardCount = floor(Random() * MAX_DECK);
     p = floor(Random() * numPlayers);
 
-    for(i = 0; i < G.playedCardCount; i++) 
+    for (i = 0; i < G.playedCardCount; i++)
     {
       G.playedCards[i] = floor(Random() * denominations);
     }
@@ -137,10 +131,16 @@ int main()
     handPos = floor(Random() * G.handCount[p]);
     G.hand[p][handPos] = minion;
 
-    checkMinion(p, choice1, choice2, &G, handPos);
+    if (checkMinion(p, choice1, choice2, &G, handPos) == 1)
+    {
+      failFlag = 1;
+    }
   }
 
-  printf("ALL TESTS OK\n");
-
+  printf("ALL TESTS RUN\n");
+  if (failFlag)
+  {
+    printf("TESTS FAILED\n\n");
+  }
   return 0;
 }

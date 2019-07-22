@@ -29,7 +29,7 @@ runtests: testDrawCard
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
-randomtestresults: randomtestcard1.c dominion.c rngs.c
+randomtestresults: randomtestcard1.c randomtestcard2.c randomtestcard3.c dominion.c rngs.c
 	echo "Results from running Random Tests:" > randomtestresults.out
 	echo "randomtestcard1.c:" >> randomtestresults.out
 	gcc -o randomtestcard1 randomtestcard1.c dominion.c rngs.c $(CFLAGS)
@@ -37,7 +37,11 @@ randomtestresults: randomtestcard1.c dominion.c rngs.c
 	echo "randomtestcard2.c:" >> randomtestresults.out
 	gcc -o randomtestcard2 randomtestcard2.c dominion.c rngs.c $(CFLAGS)
 	./randomtestcard2 >> randomtestresults.out
-	gcov -f dominion.c >> randomtestresults.out 
+	echo "randomtestcard3.c:" >> randomtestresults.out
+	gcc -o randomtestcard3 randomtestcard3.c dominion.c rngs.c $(CFLAGS)
+	./randomtestcard3 >> randomtestresults.out
+	echo "Coverage within functions:" >> randomtestresults.out
+	gcov -f -b -c dominion.c >> randomtestresults.out 
 	echo "Complete Test Results:" >> randomtestresults.out
 	cat dominion.c.gcov >> randomtestresults.out
 

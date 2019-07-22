@@ -207,7 +207,6 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 
 int shuffle(int player, struct gameState *state)
 {
-
 	int newDeck[MAX_DECK];
 	int newDeckPos = 0;
 	int card;
@@ -216,7 +215,7 @@ int shuffle(int player, struct gameState *state)
 	if (state->deckCount[player] < 1)
 		return -1;
 	qsort((void *)(state->deck[player]), state->deckCount[player], sizeof(int), compare);
-	/* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
+	///* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
 
 	while (state->deckCount[player] > 0)
 	{
@@ -234,7 +233,6 @@ int shuffle(int player, struct gameState *state)
 		state->deck[player][i] = newDeck[i];
 		state->deckCount[player]++;
 	}
-
 	return 0;
 }
 

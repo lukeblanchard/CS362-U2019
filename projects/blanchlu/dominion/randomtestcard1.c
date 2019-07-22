@@ -78,17 +78,9 @@ int checkBaron(int currentPlayer, int choice1, struct gameState *post)
     }
   }
 
-  if (r != 0)
+  if (r != 0 || memcmp(&pre, post, sizeof(struct gameState)) != 0)
   {
-    printf("TEST ERRORED OUT\n");
-  }
-
-  if (memcmp(&pre, post, sizeof(struct gameState)) != 0)
-  {
-    printf("TEST FAILED\n");
-    printf("choice1: %d\n", choice1);
-    printf("pre handCount: %d\n", pre.handCount[currentPlayer]);
-    printf("post handCount: %d\n", post->handCount[currentPlayer]);
+    return 1;
   }
 
   return 0;
@@ -96,8 +88,7 @@ int checkBaron(int currentPlayer, int choice1, struct gameState *post)
 
 int main()
 {
-
-  int i, n, p, choice1;
+  int i, n, p, choice1, failFlag;
   int denominations = 25;
   struct gameState G;
 
@@ -137,10 +128,16 @@ int main()
     {
       G.supplyCount[i] = floor(Random() * 10);
     }
-    checkBaron(p, choice1, &G);
+    if (checkBaron(p, choice1, &G) == 1)
+    {
+      failFlag = 1;
+    }
   }
 
   printf("ALL TESTS RUN\n");
-
+  if (failFlag)
+  {
+    printf("TESTS FAILED\n\n");
+  }
   return 0;
 }
