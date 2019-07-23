@@ -16,7 +16,7 @@ char *inputString()
 {
     // TODO: rewrite this function
     int idx = floor(rand() % 5);
-    char* words[] = {"reset\0", "random\0", "testing\0", "summer\0", "classes\0"};
+    char* words[] = {"reset\0", "rando\0", "testi\0", "summe\0", "class\0"};
     return words[idx];
 }
 
