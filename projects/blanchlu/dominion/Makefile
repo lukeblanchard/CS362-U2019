@@ -33,7 +33,9 @@ randomtestresults: randomtestcard1.c randomtestcard2.c randomtestcard3.c dominio
 	echo "Results from running Random Tests:" > randomtestresults.out
 	echo "randomtestcard1.c:" >> randomtestresults.out
 	gcc -o randomtestcard1 randomtestcard1.c dominion.c rngs.c $(CFLAGS)
+	echo "start time: " $$(date -u) >> randomtestresults.out
 	./randomtestcard1 >> randomtestresults.out
+	echo "end time: " $$(date -u) >> randomtestresults.out
 	echo "randomtestcard2.c:" >> randomtestresults.out
 	gcc -o randomtestcard2 randomtestcard2.c dominion.c rngs.c $(CFLAGS)
 	./randomtestcard2 >> randomtestresults.out
