@@ -6,7 +6,14 @@
 #include <math.h>
 #include "rngs.h"
 
-int checkTribute(int currentPlayer, int nextPlayer, struct gameState *post)
+struct testResults {
+    int coins;
+    int handCount;
+    int actions;
+    int state;
+};
+
+int checkTribute(int currentPlayer, int nextPlayer, struct gameState *post, struct testResults *results)
 {
     struct gameState pre;
     memcpy(&pre, post, sizeof(struct gameState));
@@ -76,9 +83,21 @@ int checkTribute(int currentPlayer, int nextPlayer, struct gameState *post)
         }
     }
 
-    if (r != 0 || memcmp(&pre, post, sizeof(struct gameState)) != 0)
+    if (memcmp(&pre, post, sizeof(struct gameState)) != 0)
     {
-        return 1;
+      results->state = 0;
+    }
+
+    if (pre.coins != post->coins) {
+      results->coins = 0;
+    }
+
+    if (pre.numActions != post->numActions) {
+      results->actions = 0;
+    }
+
+    if (pre.handCount[currentPlayer] != post->handCount[currentPlayer]) {
+      results->handCount = 0;
     }
 
     return 0;
@@ -86,9 +105,16 @@ int checkTribute(int currentPlayer, int nextPlayer, struct gameState *post)
 
 int main()
 {
-    int i, j, n, p, numPlayers, nextPlayer, failFlag;
+    int i, j, n, p, numPlayers, nextPlayer;
     int denominations = 25;
     struct gameState G;
+
+    struct testResults results;
+
+    results.handCount = 1;
+    results.coins = 1;
+    results.actions = 1;
+    results.state = 1;
 
     printf("Testing Tribute.\n");
     printf("***************\n");
@@ -141,16 +167,25 @@ int main()
         G.coins = floor(Random() * 10);
         G.whoseTurn = p;
 
-        if (checkTribute(p, nextPlayer, &G) == 1)
-        {
-            failFlag = 1;
-        }
+        checkTribute(p, nextPlayer, &G, &results);
     }
 
     printf("ALL TESTS RUN\n");
-    if (failFlag)
+    if(!results.state)
     {
-      printf("TESTS FAILED\n\n");
+      printf("Pre and Post state do not match\n");
+    }
+    if(!results.coins)
+    {
+      printf("Pre and Post coin counts do not match\n");
+    }
+    if(!results.actions)
+    {
+      printf("Pre and Post actions do not match\n");
+    }
+    if(!results.handCount) 
+    {
+      printf("Pre and Post handCount do not match\n");
     }
 
     return 0;

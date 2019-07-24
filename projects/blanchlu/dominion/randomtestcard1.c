@@ -6,19 +6,13 @@
 #include <math.h>
 #include "rngs.h"
 
-void myAssert(int bool)
-{
-  if (bool == 1)
-  {
-    printf("PASSED\n");
-  }
-  else
-  {
-    printf("FAILED\n");
-  }
-}
+struct testResults {
+    int supplyCount;
+    int coins;
+    int state;
+};
 
-int checkBaron(int currentPlayer, int choice1, struct gameState *post)
+int checkBaron(int currentPlayer, int choice1, struct gameState *post, struct testResults *results)
 {
   struct gameState pre;
   memcpy(&pre, post, sizeof(struct gameState));
@@ -78,9 +72,18 @@ int checkBaron(int currentPlayer, int choice1, struct gameState *post)
     }
   }
 
-  if (r != 0 || memcmp(&pre, post, sizeof(struct gameState)) != 0)
+  if (memcmp(&pre, post, sizeof(struct gameState)) != 0)
   {
-    return 1;
+    results->state = 0;
+  }
+
+  if (pre.coins != post->coins) {
+    results->coins = 0;
+  }
+
+  if(pre.supplyCount[estate] != post->supplyCount[estate])
+  {
+    results->supplyCount = 0;
   }
 
   return 0;
@@ -88,9 +91,14 @@ int checkBaron(int currentPlayer, int choice1, struct gameState *post)
 
 int main()
 {
-  int i, n, p, choice1, failFlag;
+  int i, n, p, choice1; 
   int denominations = 25;
   struct gameState G;
+  struct testResults results;
+
+  results.supplyCount = 1;
+  results.coins = 1;
+  results.state = 1;
 
   printf("Testing Baron.\n");
   printf("**************\n");
@@ -128,16 +136,21 @@ int main()
     {
       G.supplyCount[i] = floor(Random() * 10);
     }
-    if (checkBaron(p, choice1, &G) == 1)
-    {
-      failFlag = 1;
-    }
+    checkBaron(p, choice1, &G, &results);
   }
 
   printf("ALL TESTS RUN\n");
-  if (failFlag)
+  if(!results.state)
   {
-    printf("TESTS FAILED\n\n");
+    printf("Pre and Post state do not match\n");
+  }
+  if(!results.coins)
+  {
+    printf("Pre and Post coin counts do not match\n");
+  }
+  if(!results.supplyCount) 
+  {
+    printf("Pre and Post estate supply count do not match\n");
   }
   return 0;
 }
