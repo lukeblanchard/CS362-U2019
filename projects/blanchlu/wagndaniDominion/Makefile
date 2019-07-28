@@ -26,16 +26,16 @@ unittest5: unittest5.c dominion.o rngs.o
 	gcc -o unittest5 -g unittest5.c dominion.o rngs.o $(CFLAGS)
 
 unittestresults: unittest1 unittest2 unittest3 unittest4 unittest5 cardtest1 cardtest2 cardtest3 cardtest4 cardtest5
-	unittest1 >unittestresults.out
-	unittest2>>unittestresults.out
-	unittest3>>unittestresults.out
-	unittest4>>unittestresults.out
-	unittest5>>unittestresults.out
-	cardtest1>>unittestresults.out
-	cardtest2>>unittestresults.out
-	cardtest3>>unittestresults.out
-	cardtest4>>unittestresults.out
-	cardtest5>>unittestresults.out
+	./unittest1 >unittestresults.out
+	./unittest2>>unittestresults.out
+	./unittest3>>unittestresults.out
+	./unittest4>>unittestresults.out
+	./unittest5>>unittestresults.out
+	./cardtest1>>unittestresults.out
+	./cardtest2>>unittestresults.out
+	./cardtest3>>unittestresults.out
+	./cardtest4>>unittestresults.out
+	./cardtest5>>unittestresults.out
 	gcov dominion.c -b -f>>unittestresults.out 
 
 cardtest1: cardtest1.c dominion.o rngs.o
